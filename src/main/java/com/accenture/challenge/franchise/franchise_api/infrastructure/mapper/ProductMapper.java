@@ -12,33 +12,32 @@ import com.accenture.challenge.franchise.franchise_api.infrastructure.adapter.en
 @Component
 public class ProductMapper {
 
-    /**
-     * Convierte un documento de MongoDB al modelo de dominio.
-     */
-    public Product toDomain(ProductDocument document) {
-        if (document == null) {
-            return null;
-        }
-        return new Product(
-            document.getId(),
-            document.getName(),
-            document.getStock(),
-            document.getBranchId()
-        );
-    }
 
-    /**
-     * Convierte el modelo de dominio a un documento de MongoDB para persistencia.
-     */
-    public ProductDocument toDocument(Product product) {
-        if (product == null) {
-            return null;
-        }
-        return new ProductDocument(
-            product.getId(),
-            product.getName(),
-            product.getStock(),
-            product.getBranchId()
-        );
+  
+   public Product toDomain(ProductDocument document) {
+    if (document == null) {
+        return null;
     }
+    
+    return Product.builder()
+            .id(document.getId())
+            .name(document.getName())
+            .stock(document.getStock())
+            .branchId(document.getBranchId())
+            .version(document.getVersion()) 
+            .build();
+}
+
+public ProductDocument toDocument(Product product) {
+    if (product == null) {
+        return null;
+    }
+    return ProductDocument.builder()
+            .id(product.getId())
+            .name(product.getName())
+            .stock(product.getStock())
+            .branchId(product.getBranchId())
+            .version(product.getVersion())
+            .build();
+}
 }

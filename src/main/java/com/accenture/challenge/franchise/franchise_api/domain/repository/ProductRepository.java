@@ -17,4 +17,6 @@ public interface ProductRepository {
     Flux<Product> findByBranchId(String branchId);
     
     Mono<Void> deleteById(String id);
+
+   Mono<Product> findTopByBranchId(String branchId);
 }

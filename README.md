@@ -1,4 +1,4 @@
-
+# Franchise Management API (Reactive Stack)
 
 Esta aplicación es una solución de alto rendimiento diseñada para la gestión jerárquica de Franquicias, Sucursales y Productos. Implementada bajo un paradigma de programación reactiva con Spring WebFlux y MongoDB, esta API garantiza un manejo de datos no bloqueante y eficiente.
 

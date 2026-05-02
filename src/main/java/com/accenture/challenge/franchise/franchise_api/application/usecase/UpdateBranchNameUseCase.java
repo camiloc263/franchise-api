@@ -7,15 +7,18 @@ import com.accenture.challenge.franchise.franchise_api.domain.repository.BranchR
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+
 @Service
 @RequiredArgsConstructor
 public class UpdateBranchNameUseCase {
+
     private final BranchRepository repository;
 
     public Mono<Void> execute(String branchId, String newName) {
         return repository.findById(branchId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Sucursal no encontrada con ID: " + branchId)))
                 .flatMap(branch -> {
-                    branch.setName(newName);
+                    branch.updateName(newName); 
                     return repository.save(branch);
                 })
                 .then();

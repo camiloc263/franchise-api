@@ -1,5 +1,7 @@
 package com.accenture.challenge.franchise.franchise_api.infrastructure.adapter.entity;
 
+import org.springframework.data.annotation.Version;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +18,7 @@ public class ProductDocument {
     private String name;
     private Integer stock;
     private String branchId;
+
+    @Version
+    private Long version;
 }

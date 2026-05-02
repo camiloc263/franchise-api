@@ -14,8 +14,8 @@ public class UpdateFranchiseNameUseCase {
 
     public Mono<Void> execute(String franchiseId, String newName) {
         return repository.findById(franchiseId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Franquicia no encontrada con ID: " + franchiseId)))
                 .flatMap(franchise -> {
-                    // Usamos el método de dominio que ya creaste y que tiene validación
                     franchise.updateName(newName);
                     return repository.save(franchise);
                 })

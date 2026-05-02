@@ -36,8 +36,14 @@ class AddProductUseCaseTest {
         CreateProductRequest request = new CreateProductRequest("Burger", 10);
         Branch branch = new Branch(branchId, "Sucursal A", "franq1", new ArrayList<>());
         
-        // El nuevo modelo de Product requiere 4 argumentos
-        Product savedProduct = new Product("prod1", "Burger", 10, branchId);
+
+        Product savedProduct = Product.builder()
+        .id("id-123") 
+        .name("Hamburguesa")
+        .stock(50) 
+        .branchId("branch-1") 
+        .version(0L) 
+        .build();
 
         when(branchRepository.findById(branchId)).thenReturn(Mono.just(branch));
         when(productRepository.save(any(Product.class))).thenReturn(Mono.just(savedProduct));
