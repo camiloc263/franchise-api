@@ -1,80 +1,136 @@
+# Franchise Management API (Reactive Stack)
+Esta solución proporciona un sistema de gestión jerárquica para franquicias, sucursales y productos, construida sobre un paradigma no bloqueante para garantizar alta concurrencia y eficiencia.
 
+## Especificaciones Técnicas
+Lenguaje: Java 21 (LTS).
 
-Esta aplicación es una solución de alto rendimiento diseñada para la gestión jerárquica de Franquicias, Sucursales y Productos. Implementada bajo un paradigma de programación reactiva con Spring WebFlux y MongoDB, esta API garantiza un manejo de datos no bloqueante y eficiente.
+Framework: Spring Boot 3.5.14 (WebFlux).
 
-Stack Tecnológico
-Lenguaje: Java 21
+Persistencia: MongoDB (Driver Reactivo).
 
-Framework: Spring Boot 3.5.14 (WebFlux)
+Documentación: Swagger / OpenAPI 3.
 
-Base de Datos: MongoDB (Reactive Driver)
+Arquitectura: Clean Architecture / Hexagonal.
 
-Documentación: Swagger / OpenAPI 3 (springdoc-openapi)
-
-Contenedor: Docker & Docker Compose
-
-Arquitectura: Clean Architecture / Hexagonal
-
-Arquitectura del Proyecto
-El proyecto sigue los principios de Arquitectura Limpia, lo que facilita el mantenimiento y la escalabilidad:
-
-Domain: Contiene las entidades de negocio y las reglas principales.
-
-Application: Maneja los casos de uso y la lógica de orquestación.
-
-Infrastructure: Implementa los adaptadores externos (Controladores REST, Repositorios MongoDB y configuraciones).
-
-Guía de Despliegue Local
-Para levantar el entorno completo (API + Base de Datos), asegúrate de tener instalado Docker y Maven.
-
-1. Clonar y Compilar
-Bash
-# Clonar el repositorio
-git clone <url-del-repositorio>
-cd franchise-api
-
-# Compilar el JAR (Saltando tests para agilizar)
-./mvnw clean package -DskipTests
-2. Iniciar con Docker Compose
-Este comando levantará la API en el puerto 8081 y MongoDB en el 27018.
+## Instrucciones de Ejecución
+1. Preparar el Entorno (Docker)
+La aplicación requiere MongoDB para persistir los datos. Utiliza el archivo docker-compose.yml para levantar la base de datos en el puerto 27018:
 
 Bash
-docker-compose up --build -d
-3. Verificar Estado
-Puedes monitorear que la aplicación haya iniciado correctamente con:
+docker-compose up -d
+2. Compilar y Ejecutar
+Una vez que el contenedor de la base de datos esté listo, inicia la API en el puerto 8081:
 
 Bash
-docker-compose logs -f api
-Documentación de la API (Swagger)
-Una vez que la aplicación esté corriendo, la documentación interactiva estará disponible en la siguiente ruta:
+./mvnw clean spring-boot:run
+## Guía de Evaluación
+Pruebas Automatizadas
+Se han implementado pruebas unitarias y de integración que validan flujos reactivos mediante StepVerifier. Para ejecutarlas:
 
+Bash
+./mvnw test
+Exploración con Swagger
+Para probar los endpoints de manera interactiva, accede a la interfaz de Swagger UI:
 🔗 http://localhost:8081/webjars/swagger-ui/index.html
 
-Nota: Se ha configurado SecurityWebFilterChain para permitir el acceso público a Swagger sin necesidad de autenticación.
+## Pruebas con Postman y JSON
+A continuación, se detallan los ejemplos de carga para las operaciones principales.
 
-Funcionalidades Implementadas
-Gestión de Franquicias y Sucursales
-[x] POST /api/franchises: Crear una nueva franquicia.
+1. Gestión de Estructura
+Crear Franquicia (POST /api/franchises):
 
-[x] POST /api/franchises/{id}/branches: Agregar una sucursal a una franquicia.
+JSON
+{
+  "name": "Franquicia de Alimentos S.A."
+}
+Agregar Sucursal (POST /api/franchises/{id}/branches):
 
-[x] PATCH /api/franchises/{id}: Actualizar nombre de la franquicia (Plus).
+JSON
+{
+  "name": "Sucursal Centro"
+}
+2. Operaciones de Inventario
+Agregar Producto a Sucursal (POST /api/branches/{id}/products):
 
-[x] PATCH /api/branches/{id}: Actualizar nombre de la sucursal (Plus).
+JSON
+{
+  "name": "Café Premium 500g",
+  "stock": 100
+}
+Actualizar Stock (PATCH /api/products/{id}/stock):
 
-Gestión de Productos e Inventario
-[x] POST /api/branches/{id}/products: Agregar un producto a una sucursal.
+JSON
+{
+  "stock": 150
+}
+## Endpoint de Lógica Avanzada (Punto 7)
+GET /api/franchises/{id}/max-stock
 
-[x] DELETE /api/products/{id}: Eliminar un producto.
+Este endpoint resuelve una agregación compleja de forma reactiva: identifica el producto con mayor stock por cada sucursal perteneciente a una franquicia específica.
 
-[x] PATCH /api/products/{id}/stock: Modificar el stock de un producto.
+Ejemplo de Respuesta:
 
-[x] PATCH /api/products/{id}/name: Actualizar nombre del producto (Plus).
+JSON
+[
+  {
+    "branchName": "Sucursal Centro",
+    "productName": "Café Premium 500g",
+    "stock": 150
+  },
+  {
+    "branchName": "Sucursal Norte",
+    "productName": "Té Verde Orgánico",
+    "stock": 92
+  }
+]
+## Detalles de Implementación Senior
+Manejo de Excepciones: Se implementó un @ControllerAdvice global para gestionar errores de negocio y transformarlos en respuestas HTTP semánticas.
 
-Lógica Senior (Punto 7)
-[x] GET /api/franchises/{id}/max-stock: Retorna el producto con mayor stock por cada sucursal para una franquicia específica.
+## Seguridad en Tests: Se ajustó la configuración de seguridad reactiva para permitir la validación de endpoints POST y PATCH durante los tests de integración.
 
-Notas de Configuración
-Bean Overriding: Se habilitó SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING=true en el entorno para permitir la personalización de la seguridad reactiva.
+## Mapeo Desacoplado: Uso de MapStruct para garantizar que las entidades de persistencia de MongoDB nunca se filtren a la capa de presentación.
 
-Resiliencia: El servicio de la API espera a que el contenedor de MongoDB pase el healthcheck antes de iniciar.
+# Guía de Ejecución de Pruebas
+La suite de pruebas está diseñada para validar tanto la lógica de negocio en la capa de dominio como la integración de los servicios en la capa de infraestructura.
+
+### Comandos Principales de Maven
+El proyecto utiliza el Maven Wrapper (mvnw), lo que garantiza que las pruebas se ejecuten con la versión correcta de Maven sin necesidad de instalaciones globales.
+
+1. Ejecución Completa
+Para limpiar artefactos previos y ejecutar toda la suite de pruebas del proyecto:
+
+Bash
+./mvnw clean test
+Este comando activará tanto los tests unitarios como los de integración localizados en src/test/java.
+
+2. Ejecución Selectiva
+Si estás trabajando en una funcionalidad específica y deseas ahorrar tiempo, puedes filtrar la ejecución:
+
+### Por Clase:
+./mvnw test -Dtest=NombreDeLaClaseTest
+
+### Por Método:
+./mvnw test -Dtest=NombreDeLaClaseTest#nombreDelMetodo
+
+### Análisis de Tecnologías Utilizadas
+### Validación Reactiva con StepVerifier
+Debido a que el proyecto utiliza Spring WebFlux, las pruebas de los casos de uso no usan aserciones simples. Se emplea ### StepVerifier para inspeccionar el flujo de señales:
+
+Expectativas de emisión: Valida que se emitan los objetos correctos (onNext).
+
+Finalización del flujo: Asegura que el flujo termine correctamente (onComplete).
+
+Manejo de errores: Verifica que las excepciones de negocio sean lanzadas cuando corresponde (onError).
+
+Pruebas de API con WebTestClient
+Para los controladores REST, se utiliza WebTestClient, el cual permite simular peticiones HTTP de forma no bloqueante.
+
+Se validan los Status Codes (201 Created, 200 OK, 404 Not Found).
+
+Se verifica la estructura del JSON de respuesta.
+
+## Reportes y Resultados
+Al finalizar, Maven mostrará un resumen en la terminal. Si necesitas un detalle técnico más profundo (por ejemplo, para depurar un error de integración), puedes consultar los archivos generados automáticamente en:
+target/surefire-reports/
+
+Tip Profesional: Antes de realizar un git push o un despliegue, siempre es recomendable ejecutar mvn clean test para asegurar que las nuevas modificaciones no hayan roto funcionalidades existentes (regresión).
