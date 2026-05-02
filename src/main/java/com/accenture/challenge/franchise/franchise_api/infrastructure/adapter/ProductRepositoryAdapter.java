@@ -13,13 +13,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-@Primary 
+@Primary
 @RequiredArgsConstructor
 public class ProductRepositoryAdapter implements ProductRepository {
 
     private final ProductMongoRepository mongoRepository;
     private final ProductMapper mapper;
-    
 
     @Override
     public Mono<Product> save(Product product) {
@@ -51,4 +50,16 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public Mono<Void> deleteById(String id) {
         return mongoRepository.deleteById(id);
     }
+
+    @Override
+    public Mono<Product> findTopByBranchId(String branchId) {
+        // Validamos la nulidad para eliminar los avisos de "Null type safety"
+        if (branchId == null) {
+            return Mono.empty();
+        }
+
+        return mongoRepository.findFirstByBranchIdOrderByStockDesc(branchId)
+                .map(entity -> mapper.toDomain(entity));
+    }
+
 }

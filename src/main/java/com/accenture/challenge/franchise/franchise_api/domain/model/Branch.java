@@ -4,19 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder; 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder 
 @NoArgsConstructor 
 @AllArgsConstructor 
 public class Branch {
     private String id;
     private String name;
     private String franchiseId;
-    private List<Product> products = new ArrayList<>(); // Inicialización por defecto
+    @Builder.Default 
+    private List<Product> products = new ArrayList<>(); 
 
-    // Tu método de dominio para agregar productos de forma segura
+  
+    public void updateName(String newName) {
+        if (newName == null || newName.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la sucursal no puede estar vacío.");
+        }
+        this.name = newName;
+    }
+
     public void addProduct(Product product) {
         if (this.products == null) {
             this.products = new ArrayList<>();
@@ -25,9 +35,8 @@ public class Branch {
     }
 
     public void removeProduct(String productName) {
-    if (this.products != null) {
-        // Filtramos la lista para remover el producto por nombre
-        this.products.removeIf(p -> p.getName().equalsIgnoreCase(productName));
+        if (this.products != null) {
+            this.products.removeIf(p -> p.getName().equalsIgnoreCase(productName));
+        }
     }
-}
 }

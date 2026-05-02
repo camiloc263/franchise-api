@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.accenture.challenge.franchise.franchise_api.domain.model.Product;
-import com.accenture.challenge.franchise.franchise_api.domain.repository.BranchRepository;
 import com.accenture.challenge.franchise.franchise_api.domain.repository.ProductRepository;
 
 import reactor.core.publisher.Mono;
@@ -23,36 +22,36 @@ class UpdateProductStockUseCaseTest {
     @Mock
     private ProductRepository productRepository;
 
-    @Mock
-    private BranchRepository branchRepository;
+
 
     private UpdateProductStockUseCase useCase;
 
-    @BeforeEach
+   @BeforeEach
     void setUp() {
-        // Ahora el constructor coincide con tu clase de aplicación
-        useCase = new UpdateProductStockUseCase(productRepository, branchRepository);
+        useCase = new UpdateProductStockUseCase(productRepository);
     }
 
     @Test
     void execute_ShouldUpdateStockSuccessfully() {
-        // GIVEN
+       
         String productId = "p1";
         int newStock = 500;
-        Product product = new Product(productId, "Burger", 10, "b1");
+       Product existingProduct = Product.builder()
+        .id("id-1") 
+        .name("Hamburguesa") 
+        .stock(10) 
+        .branchId("branch-1") 
+        .version(0L) 
+        .build();
 
-        // Configuramos los mocks para el flujo reactivo
-        when(productRepository.findById(productId)).thenReturn(Mono.just(product));
-        when(productRepository.save(any(Product.class))).thenReturn(Mono.just(product));
+        when(productRepository.findById(productId)).thenReturn(Mono.just(existingProduct));
+        when(productRepository.save(any(Product.class))).thenReturn(Mono.just(existingProduct));
 
-        // WHEN: Llamamos al método con 2 argumentos (String, int)
         Mono<Void> result = useCase.execute(productId, newStock);
 
-        // THEN
         StepVerifier.create(result)
                 .verifyComplete();
         
-        // Verificación adicional de comportamiento
         verify(productRepository).save(argThat(p -> p.getStock() == 500));
     }
 }

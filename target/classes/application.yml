@@ -1,11 +1,18 @@
 server:
   port: 8081
+
 spring:
   application:
     name: franchise-api
+  
+  main:
+  
+    allow-bean-definition-overriding: true 
+
   data:
     mongodb:
       uri: mongodb://localhost:27017/franchise_db
+
   security:
     user:
       name: admin

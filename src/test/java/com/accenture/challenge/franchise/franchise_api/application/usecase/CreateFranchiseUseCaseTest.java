@@ -21,20 +21,21 @@ class CreateFranchiseUseCaseTest {
 
     @Test
     void execute_ShouldCreateFranchiseSuccessfully() {
-        // GIVEN
         CreateFranchiseRequest request = new CreateFranchiseRequest();
         request.setName("Nueva Franquicia");
         
+        
         Franchise savedFranchise = new Franchise("generated-id", "Nueva Franquicia", new ArrayList<>());
 
-        // Mockeamos el save para que devuelva un Mono con el objeto (aunque el usecase lo ignore)
         when(repository.save(any(Franchise.class))).thenReturn(Mono.just(savedFranchise));
 
-        // WHEN: Ejecutamos el caso de uso
-        Mono<Void> result = useCase.execute(request); // Cambiado a Mono<Void> para coincidir con tu código
+        Mono<Franchise> result = useCase.execute(request); 
 
-        // THEN: Verificamos que el flujo se complete sin errores
         StepVerifier.create(result)
+                .expectNextMatches(franchise -> 
+                        franchise.getId().equals("generated-id") && 
+                        franchise.getName().equals("Nueva Franquicia")
+                )
                 .verifyComplete(); 
     }
 }

@@ -2,7 +2,7 @@ package com.accenture.challenge.franchise.franchise_api.application.usecase;
 
 import org.springframework.stereotype.Service;
 
-import com.accenture.challenge.franchise.franchise_api.domain.repository.BranchRepository;
+import com.accenture.challenge.franchise.franchise_api.domain.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -10,17 +10,15 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class UpdateProductNameUseCase {
-    private final BranchRepository repository;
+    private final ProductRepository productRepository; 
 
-    public Mono<Void> execute(String branchId, String oldName, String newName) {
-        return repository.findById(branchId)
-                .flatMap(branch -> {
-                    branch.getProducts().stream()
-                            .filter(p -> p.getName().equals(oldName))
-                            .findFirst()
-                            .ifPresent(p -> p.setName(newName));
-                    return repository.save(branch);
+    public Mono<Void> execute(String productId, String newName) {
+        return productRepository.findById(productId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Producto no encontrado")))
+                .flatMap(product -> {
+                    product.setName(newName); 
+                    return productRepository.save(product);
                 })
-                .then();
-    }
+                .then(); 
+}
 }

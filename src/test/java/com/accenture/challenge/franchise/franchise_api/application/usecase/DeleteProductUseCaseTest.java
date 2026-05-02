@@ -24,30 +24,38 @@ class DeleteProductUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        useCase = new DeleteProductUseCase(productRepository, branchRepository);
+        useCase = new DeleteProductUseCase(branchRepository, productRepository);
     }
 
     @Test
     void execute_ShouldRemoveProductSuccessfully() {
-        // GIVEN
+
         String branchId = "b1";
-        String productIdToDelete = "p1"; // Generalmente se elimina por ID en UseCases profesionales
-        
+        String productIdToDelete = "p1";
         List<Product> products = new ArrayList<>();
-        // CORRECCIÓN: Usamos el constructor de 4 argumentos: id, name, stock, branchId
-        products.add(new Product("p1", "Soda", 50, branchId)); 
-        products.add(new Product("p2", "Burger", 20, branchId));
-        
+
+        Product product1 = Product.builder()
+                .id("id-1")
+                .stock(10)
+                .branchId("branch-1")
+                .version(0L)
+                .build();
+
+        Product product2 = Product.builder()
+                .id("id-2")
+                .name("Otro producto")
+                .stock(20)
+                .branchId("branch-1")
+                .version(0L)
+                .build();
+
         Branch branch = new Branch(branchId, "Sucursal A", "f1", products);
 
-        // Mocking
         when(branchRepository.findById(branchId)).thenReturn(Mono.just(branch));
         when(productRepository.deleteById(productIdToDelete)).thenReturn(Mono.empty());
 
-        // WHEN
         Mono<Void> result = useCase.execute(branchId, productIdToDelete);
 
-        // THEN
         StepVerifier.create(result)
                 .verifyComplete();
     }

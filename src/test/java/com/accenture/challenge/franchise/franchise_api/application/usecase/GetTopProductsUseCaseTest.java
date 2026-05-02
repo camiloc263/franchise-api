@@ -1,64 +1,63 @@
 package com.accenture.challenge.franchise.franchise_api.application.usecase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 
 import com.accenture.challenge.franchise.franchise_api.application.dto.TopProductResponse;
 import com.accenture.challenge.franchise.franchise_api.domain.model.Branch;
 import com.accenture.challenge.franchise.franchise_api.domain.model.Product;
 import com.accenture.challenge.franchise.franchise_api.domain.repository.BranchRepository;
-import com.accenture.challenge.franchise.franchise_api.domain.repository.ProductRepository; // Importación necesaria
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import reactor.core.publisher.Flux;
-import reactor.test.StepVerifier;
-import java.util.Arrays;
-import java.util.List;
+import com.accenture.challenge.franchise.franchise_api.domain.repository.ProductRepository;
 
-import static org.mockito.Mockito.when;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
 
 class GetTopProductsUseCaseTest {
 
-    private final BranchRepository branchRepository = Mockito.mock(BranchRepository.class);
-    private final ProductRepository productRepository = Mockito.mock(ProductRepository.class); // Mock adicional
+    private BranchRepository branchRepository;
+    private ProductRepository productRepository;
     private GetTopProductsUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        // Inicialización con el constructor que espera ambos repositorios
-        useCase = new GetTopProductsUseCase(productRepository, branchRepository);
+        branchRepository = Mockito.mock(BranchRepository.class);
+        productRepository = Mockito.mock(ProductRepository.class);
+        useCase = new GetTopProductsUseCase(branchRepository, productRepository);
     }
 
     @Test
     void execute_ShouldReturnFluxOfTopProducts() {
-        // GIVEN
-        String franchiseId = "f123";
-        String branchAId = "b1";
-        String branchBId = "b2";
-        
-        // CORRECCIÓN: Constructor de 4 argumentos (id, name, stock, branchId)
-        Product p1 = new Product("p1", "LowStock", 10, branchAId);
-        Product p2 = new Product("p2", "HighStock", 150, branchAId); 
-        List<Product> productsA = Arrays.asList(p1, p2);
-        Branch branchA = new Branch(branchAId, "Sucursal A", franchiseId, productsA);
+        String franchiseId = "f1";
 
-        Product p3 = new Product("p3", "OnlyItem", 45, branchBId);
-        List<Product> productsB = Arrays.asList(p3);
-        Branch branchB = new Branch(branchBId, "Sucursal B", franchiseId, productsB);
+        // Configuración de Sucursales
+        Branch branchA = Branch.builder().id("b1").name("Sucursal A").build();
+        Branch branchB = Branch.builder().id("b2").name("Sucursal B").build();
 
+        // Configuración de Productos Top
+        Product topProductA = Product.builder().name("Producto Uno").stock(100).build();
+        Product topProductB = Product.builder().name("Producto Tres").stock(200).build();
+
+        // Mocks
         when(branchRepository.findByFranchiseId(franchiseId)).thenReturn(Flux.just(branchA, branchB));
+        when(productRepository.findTopByBranchId("b1")).thenReturn(Mono.just(topProductA));
+        when(productRepository.findTopByBranchId("b2")).thenReturn(Mono.just(topProductB));
 
-        // WHEN: Ejecutamos el reporte
+        // Ejecución
         Flux<TopProductResponse> result = useCase.execute(franchiseId);
 
-        // THEN: Verificamos los resultados esperados
+        // VERIFICACIÓN CORREGIDA
         StepVerifier.create(result)
                 .expectNextMatches(response -> 
                     response.getBranchName().equals("Sucursal A") && 
-                    response.getProductName().equals("HighStock") && 
-                    response.getStock() == 150)
+                    response.getProductName().equals("Producto Uno") && 
+                    response.getStock() == 100)
                 .expectNextMatches(response -> 
                     response.getBranchName().equals("Sucursal B") && 
-                    response.getProductName().equals("OnlyItem") && 
-                    response.getStock() == 45)
+                    response.getProductName().equals("Producto Tres") && 
+                    response.getStock() == 200) // Consumimos el segundo elemento que antes causaba el error
                 .verifyComplete();
     }
 }

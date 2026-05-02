@@ -1,3 +1,4 @@
+D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\dto\ApiErrorResponse.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\dto\CreateBranchRequest.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\dto\CreateFranchiseRequest.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\dto\CreateProductRequest.java
@@ -13,6 +14,7 @@ D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\fran
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\usecase\UpdateFranchiseNameUseCase.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\usecase\UpdateProductNameUseCase.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\application\usecase\UpdateProductStockUseCase.java
+D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\common\exception\ResourceNotFoundException.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\domain\model\Branch.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\domain\model\Franchise.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\domain\model\Product.java
@@ -35,7 +37,7 @@ D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\fran
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\config\SecurityConfig.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\controller\BranchController.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\controller\FranchiseController.java
-D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\exception\GlobalExceptionHandler.java
+D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\controller\GlobalExceptionHandler.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\mapper\BranchMapper.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\mapper\FranchiseMapper.java
 D:\evaluacion\franchise-api\src\main\java\com\accenture\challenge\franchise\franchise_api\infrastructure\mapper\ProductMapper.java

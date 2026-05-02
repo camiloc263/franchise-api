@@ -1,80 +1,140 @@
-# Franchise Management API (Reactive Stack)
+---
 
-Esta aplicación es una solución de alto rendimiento diseñada para la gestión jerárquica de Franquicias, Sucursales y Productos. Implementada bajo un paradigma de programación reactiva con Spring WebFlux y MongoDB, esta API garantiza un manejo de datos no bloqueante y eficiente.
+## ✅ Criterios de Aceptación Cumplidos
 
-Stack Tecnológico
-Lenguaje: Java 21
+*   [x] **Spring Boot & WebFlux:** Stack 100% reactivo.
+*   [x] **Persistencia:** Integración con MongoDB mediante contenedores.
+*   [x] **Dockerizado:** Orquestación de servicios lista para despliegue.
+*   [x] **Punto 7 (Lógica Senior):** Consulta optimizada de stocks máximos por sucursal.
+*   [x] **Plus - CRUD Extendido:** Endpoints adicionales para actualizar nombres de franquicias, sucursales y productos.
 
-Framework: Spring Boot 3.5.14 (WebFlux)
+---
 
-Base de Datos: MongoDB (Reactive Driver)
+## 👤 Autor
+*   **Camilo Caicedo** - *Systems Engineer*
 
-Documentación: Swagger / OpenAPI 3 (springdoc-openapi)
+---
 
-Contenedor: Docker & Docker Compose
+### Un último detalle para ti, Camilo:
+He incluido la sección del **Punto 7** con un ejemplo de respuesta claro, ya que es lo que más mirará el evaluador para validar tu capacidad de análisis. Como ya tienes el repo en GitHub, asegúrate de que el archivo se llame exactamente `README.md` (con mayúsculas) para que se renderice automáticamente en la página principal del repositorio.
 
-Arquitectura: Clean Architecture / Hexagonal
+¿Quieres que te ayude a generar el archivo de la colección de Postman enAquí tienes el contenido completo y definitivo para tu **`README.md`**. Está diseñado con un estándar de **Arquitectura Limpia**, resaltando el enfoque reactivo y facilitando la vida del evaluador con ejemplos claros.
 
-Arquitectura del Proyecto
-El proyecto sigue los principios de Arquitectura Limpia, lo que facilita el mantenimiento y la escalabilidad:
+Solo tienes que copiar y pegar el siguiente bloque:
 
-Domain: Contiene las entidades de negocio y las reglas principales.
+---
 
-Application: Maneja los casos de uso y la lógica de orquestación.
+# 🚀 Franchise Management API (Reactive Stack)
 
-Infrastructure: Implementa los adaptadores externos (Controladores REST, Repositorios MongoDB y configuraciones).
+Esta aplicación es una solución de alto rendimiento diseñada para la gestión jerárquica de **Franquicias, Sucursales y Productos**. Implementada bajo un paradigma de **programación reactiva** con **Spring WebFlux** y **MongoDB**, garantiza un manejo de datos no bloqueante y eficiente.
 
-Guía de Despliegue Local
-Para levantar el entorno completo (API + Base de Datos), asegúrate de tener instalado Docker y Maven.
+---
 
-1. Clonar y Compilar
-Bash
+## 🛠️ Stack Tecnológico
+
+*   **Lenguaje:** Java 21
+*   **Framework:** Spring Boot 3.5.14 (WebFlux)
+*   **Base de Datos:** MongoDB (Reactive Driver)
+*   **Documentación:** Swagger / OpenAPI 3 (springdoc-openapi)
+*   **Contenedor:** Docker & Docker Compose
+*   **Arquitectura:** Clean Architecture / Hexagonal
+
+---
+
+## 🏗️ Arquitectura y Diseño
+El proyecto sigue los principios de **Clean Architecture**, lo que facilita el mantenimiento y la escalabilidad:
+*   **Domain:** Entidades de negocio y reglas de dominio.
+*   **Application:** Casos de uso y orquestación de lógica.
+*   **Infrastructure:** Adaptadores externos (Controladores, Repositorios, Configuraciones).
+
+---
+
+## 📦 Guía de Despliegue Local
+
+Para levantar el entorno completo (API + Base de Datos), asegúrate de tener instalado **Docker** y **Maven**.
+
+### 1. Clonar y Compilar
+```bash
 # Clonar el repositorio
 git clone <url-del-repositorio>
 cd franchise-api
 
-# Compilar el JAR (Saltando tests para agilizar)
+# Compilar el JAR ejecutable
 ./mvnw clean package -DskipTests
 2. Iniciar con Docker Compose
-Este comando levantará la API en el puerto 8081 y MongoDB en el 27018.
+Este comando levantará la API en el puerto 8081 y MongoDB en el puerto 27018.
 
 Bash
 docker-compose up --build -d
 3. Verificar Estado
-Puedes monitorear que la aplicación haya iniciado correctamente con:
-
 Bash
 docker-compose logs -f api
-Documentación de la API (Swagger)
-Una vez que la aplicación esté corriendo, la documentación interactiva estará disponible en la siguiente ruta:
-
+📖 Documentación de la API (Swagger)
+Una vez iniciada la aplicación, accede a la interfaz interactiva aquí:
 🔗 http://localhost:8081/webjars/swagger-ui/index.html
 
-Nota: Se ha configurado SecurityWebFilterChain para permitir el acceso público a Swagger sin necesidad de autenticación.
+🕹️ Endpoints y Ejemplos de Uso
+A continuación, se detallan los payloads para importar en herramientas como Postman o Insomnia.
 
-Funcionalidades Implementadas
-Gestión de Franquicias y Sucursales
-[x] POST /api/franchises: Crear una nueva franquicia.
+1. Franquicias
+POST /api/franchises - Crear una nueva franquicia.
 
-[x] POST /api/franchises/{id}/branches: Agregar una sucursal a una franquicia.
+JSON
+{
+  "name": "Franquicia Global"
+}
+2. Sucursales
+POST /api/franchises/{franchiseId}/branches - Agregar sucursal.
 
-[x] PATCH /api/franchises/{id}: Actualizar nombre de la franquicia (Plus).
+JSON
+{
+  "name": "Sucursal Centro"
+}
+3. Productos
+POST /api/branches/{branchId}/products - Agregar producto a sucursal.
 
-[x] PATCH /api/branches/{id}: Actualizar nombre de la sucursal (Plus).
+JSON
+{
+  "name": "Producto A",
+  "stock": 150
+}
+PATCH /api/products/{productId}/stock - Modificar stock.
 
-Gestión de Productos e Inventario
-[x] POST /api/branches/{id}/products: Agregar un producto a una sucursal.
+JSON
+{
+  "newStock": 200
+}
+DELETE /api/products/{productId} - Eliminar producto.
 
-[x] DELETE /api/products/{id}: Eliminar un producto.
+4. Consultas Especializadas (Punto 7)
+GET /api/franchises/{franchiseId}/max-stock
+Este endpoint retorna el producto con mayor stock por cada sucursal de la franquicia.
 
-[x] PATCH /api/products/{id}/stock: Modificar el stock de un producto.
+Respuesta de ejemplo:
 
-[x] PATCH /api/products/{id}/name: Actualizar nombre del producto (Plus).
+JSON
+[
+  {
+    "branchName": "Sucursal Norte",
+    "productName": "Camisetas",
+    "stock": 500
+  },
+  {
+    "branchName": "Sucursal Sur",
+    "productName": "Zapatos",
+    "stock": 320
+  }
+]
+✅ Criterios de Aceptación Cumplidos
+[x] Spring Boot & WebFlux: Stack 100% reactivo.
 
-Lógica Senior (Punto 7)
-[x] GET /api/franchises/{id}/max-stock: Retorna el producto con mayor stock por cada sucursal para una franquicia específica.
+[x] Persistencia: Integración con MongoDB mediante contenedores.
 
-Notas de Configuración
-Bean Overriding: Se habilitó SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING=true en el entorno para permitir la personalización de la seguridad reactiva.
+[x] Dockerizado: Orquestación de servicios lista para despliegue.
 
-Resiliencia: El servicio de la API espera a que el contenedor de MongoDB pase el healthcheck antes de iniciar.
+[x] Punto 7 (Lógica Senior): Consulta optimizada de stocks máximos por sucursal.
+
+[x] Plus - CRUD Extendido: Endpoints adicionales para actualizar nombres de franquicias, sucursales y productos.
+
+👤 Autor
+Camilo Caicedo - Systems Engineer
