@@ -134,3 +134,22 @@ Al finalizar, Maven mostrará un resumen en la terminal. Si necesitas un detalle
 target/surefire-reports/
 
 Tip Profesional: Antes de realizar un git push o un despliegue, siempre es recomendable ejecutar mvn clean test para asegurar que las nuevas modificaciones no hayan roto funcionalidades existentes (regresión).
+
+## ☁️ Despliegue en la Nube (Ambiente de Evaluación)
+Como valor agregado y para facilitar la revisión técnica, la API ha sido desplegada en una instancia de **AWS (Amazon Web Services)**, configurada con un stack productivo que incluye Docker y gestión de memoria optimizada.
+
+### Acceso a la Documentación Interactiva
+La documentación completa de los endpoints, esquemas de datos y la capacidad de realizar pruebas en tiempo real está disponible en el siguiente enlace:
+
+🔗 **Swagger UI Cloud:** [http://3.14.87.73:8081/webjars/swagger-ui/index.html](http://3.14.87.73:8081/webjars/swagger-ui/index.html)
+*(Nota: Una vez en el sitio, asegúrese de que la barra de exploración apunte a `/v3/api-docs`)*. Es decir http://3.14.87.73:8081/v3/api-docs
+
+### Seguridad y Autenticación
+Para garantizar la integridad de las operaciones de escritura (POST, PATCH, DELETE), se ha implementado **Spring Security** con autenticación básica. Utilice las siguientes credenciales para las pruebas:
+
+| Credencial | Valor |
+| :--- | :--- |
+| **Usuario** | `admin` |
+| **Contraseña** | `admin123` |
+
+> **Nota Técnica:** El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
