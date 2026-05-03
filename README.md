@@ -141,8 +141,13 @@ Como valor agregado y para facilitar la revisión técnica, la API ha sido despl
 ### Acceso a la Documentación Interactiva
 La documentación completa de los endpoints, esquemas de datos y la capacidad de realizar pruebas en tiempo real está disponible en el siguiente enlace:
 
+<<<<<<< Updated upstream
 🔗 **Swagger UI Cloud:** [http://3.14.87.73:8081/webjars/swagger-ui/index.html](http://3.14.87.73:8081/webjars/swagger-ui/index.html)
 *(Nota: Una vez en el sitio, asegúrese de que la barra de exploración apunte a `/v3/api-docs`)*. Es decir http://3.14.87.73:8081/v3/api-docs
+=======
+🔗 **Swagger UI Cloud:** [http://3.14.87.73:8081/v3/api-docs]
+*(Nota: Una vez en el sitio, asegúrese de que la barra de exploración apunte a `/v3/api-docs`)*.
+>>>>>>> Stashed changes
 
 ### Seguridad y Autenticación
 Para garantizar la integridad de las operaciones de escritura (POST, PATCH, DELETE), se ha implementado **Spring Security** con autenticación básica. Utilice las siguientes credenciales para las pruebas:
@@ -152,4 +157,8 @@ Para garantizar la integridad de las operaciones de escritura (POST, PATCH, DELE
 | **Usuario** | `admin` |
 | **Contraseña** | `admin123` |
 
+<<<<<<< Updated upstream
 > **Nota Técnica:** El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
+=======
+> **Nota Técnica:** El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
+>>>>>>> Stashed changes
