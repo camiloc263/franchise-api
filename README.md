@@ -135,6 +135,7 @@ target/surefire-reports/
 
 Tip Profesional: Antes de realizar un git push o un despliegue, siempre es recomendable ejecutar mvn clean test para asegurar que las nuevas modificaciones no hayan roto funcionalidades existentes (regresión).
 
+<<<<<<< HEAD
 
 #Despliegue en la Nube (AWS)
 La solución se encuentra desplegada y operativa en una instancia EC2 de AWS, orquestada mediante Docker Compose para garantizar la paridad entre los entornos de desarrollo y producción.
@@ -196,3 +197,32 @@ Monitoreo: Seguimiento de flujos reactivos mediante docker-compose logs -f para 
 Estrategia de Ramas: El desarrollo se centralizó en la rama franquicias y se integró mediante push --force a la rama main para mantener un historial de despliegue lineal y limpio.
 
 Seguridad: Se implementó un archivo .gitignore estricto para prevenir la fuga de credenciales sensibles (como la llave .pem de AWS) y artefactos de compilación local (target/).
+=======
+## ☁️ Despliegue en la Nube (Ambiente de Evaluación)
+Como valor agregado y para facilitar la revisión técnica, la API ha sido desplegada en una instancia de **AWS (Amazon Web Services)**, configurada con un stack productivo que incluye Docker y gestión de memoria optimizada.
+
+### Acceso a la Documentación Interactiva
+La documentación completa de los endpoints, esquemas de datos y la capacidad de realizar pruebas en tiempo real está disponible en el siguiente enlace:
+
+<<<<<<< Updated upstream
+🔗 **Swagger UI Cloud:** [http://3.14.87.73:8081/webjars/swagger-ui/index.html](http://3.14.87.73:8081/webjars/swagger-ui/index.html)
+*(Nota: Una vez en el sitio, asegúrese de que la barra de exploración apunte a `/v3/api-docs`)*. Es decir http://3.14.87.73:8081/v3/api-docs
+=======
+🔗 **Swagger UI Cloud:** [http://3.14.87.73:8081/v3/api-docs]
+*(Nota: Una vez en el sitio, asegúrese de que la barra de exploración apunte a `/v3/api-docs`)*.
+>>>>>>> Stashed changes
+
+### Seguridad y Autenticación
+Para garantizar la integridad de las operaciones de escritura (POST, PATCH, DELETE), se ha implementado **Spring Security** con autenticación básica. Utilice las siguientes credenciales para las pruebas:
+
+| Credencial | Valor |
+| :--- | :--- |
+| **Usuario** | `admin` |
+| **Contraseña** | `admin123` |
+
+<<<<<<< Updated upstream
+> **Nota Técnica:** El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
+=======
+> **Nota Técnica:** El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
+>>>>>>> Stashed changes
+>>>>>>> f460334dd18bd167e3b27cfb0e9132a50887117b
