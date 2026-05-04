@@ -1,3 +1,5 @@
+# API Franquicia
+
 API de gestión de franquicias (Pila reactiva)
 Esta solución proporciona un sistema de gestión jerárquica para franquicias, sucursales y productos, construido sobre un paradigma no bloqueante para garantizar alta concurrencia y eficiencia.
 
