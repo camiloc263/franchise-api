@@ -33,7 +33,7 @@ import reactor.core.publisher.Mono;
 
 @Tag(name = "Franchises", description = "Gestión centralizada de franquicias y sus dependencias")
 @RestController
-@RequestMapping("/api/v1/franchises") 
+@RequestMapping("/api/franchises")
 @RequiredArgsConstructor 
 public class FranchiseController {
 
@@ -42,13 +42,14 @@ public class FranchiseController {
     private final AddBranchUseCase addBranchUseCase;
     private final UpdateFranchiseNameUseCase updateFranchiseNameUseCase;
 
+
     @Operation(summary = "Crear una nueva franquicia")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Franquicia creada exitosamente"),
         @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     })
     @PostMapping
-    public Mono<ResponseEntity<Franchise>> createFranchise(@Valid @RequestBody CreateFranchiseRequest request) {
+    public Mono<ResponseEntity<Franchise>> createFranchise(@Valid @RequestBody CreateFranchiseRequest request) { // Añadimos @Valid
         return createFranchiseUseCase.execute(request)
                 .map(franchise -> ResponseEntity.status(HttpStatus.CREATED).body(franchise));
     }
@@ -61,34 +62,22 @@ public class FranchiseController {
     @PostMapping("/{id}/branches")
     @ResponseStatus(HttpStatus.CREATED) 
     public Mono<Void> addBranchToFranchise(
-            @Parameter(description = "ID de la franquicia", example = "64b7f1...") 
-            @PathVariable("id") String franchiseId,
+            @Parameter(description = "ID de la franquicia", example = "64b7f1...") @PathVariable("id") String franchiseId,
             @Valid @RequestBody CreateBranchRequest request) {
         return addBranchUseCase.execute(franchiseId, request);
     }
 
     @Operation(summary = "Obtener productos con mayor stock por sucursal (Requerimiento 7)")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Consulta exitosa"),
-        @ApiResponse(responseCode = "404", description = "Franquicia no encontrada")
-    })
     @GetMapping("/{id}/top-products")
     public Flux<TopProductResponse> getTopProductsByBranch(
-            @Parameter(description = "ID de la franquicia a consultar") 
-            @PathVariable("id") String franchiseId) {
+            @Parameter(description = "ID de la franquicia a consultar") @PathVariable("id") String franchiseId) {
         return getTopProductsUseCase.execute(franchiseId);
     }
 
     @Operation(summary = "Actualizar nombre de la franquicia")
-    @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Nombre actualizado correctamente"),
-        @ApiResponse(responseCode = "404", description = "Franquicia no encontrada")
-    })
     @PatchMapping("/{id}/name")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> updateFranchiseName(
-            @Parameter(description = "ID de la franquicia a modificar") 
-            @PathVariable("id") String franchiseId,
+            @Parameter(description = "ID de la franquicia a modificar") @PathVariable("id") String franchiseId,
             @Valid @RequestBody UpdateNameRequest request) {
         return updateFranchiseNameUseCase.execute(franchiseId, request.getName());
     }
