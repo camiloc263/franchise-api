@@ -192,6 +192,19 @@ Reconstrucción: Uso de docker-compose up -d --build para compilar el código fu
 
 Monitoreo: Seguimiento de flujos reactivos mediante docker-compose logs -f para asegurar que el contexto de Spring Boot y el driver de MongoDB Reactivo levanten correctamente.
 
+
+## Seguridad y Autenticación
+Para garantizar la integridad de las operaciones de escritura (POST, PATCH, DELETE), se ha implementado Spring Security con autenticación básica. Utilice las siguientes credenciales para las pruebas:
+
+Credencial	Valor
+Usuario	admin
+Contraseña	admin123
+<<<<<<< Actualizado en la fuente original
+
+Nota Técnica: El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución. ======= Nota Técnica: El despliegue se realizó utilizando una arquitectura de contenedores, asegurando que el entorno de nube sea idéntico al entorno de desarrollo local, garantizando así la portabilidad de la solución.
+
+Cambios almacenados f460334dd18bd167e3b27cfb0e9132a50887117b
+
 ## Notas Adicionales de Implementación Senior
 Estrategia de Ramas: El desarrollo se centralizó en la rama franquicias y se integró mediante push --force a la rama main para mantener un historial de despliegue lineal y limpio.
 
