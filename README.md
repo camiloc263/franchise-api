@@ -134,3 +134,30 @@ Al finalizar, Maven mostrará un resumen en la terminal. Si necesitas un detalle
 target/surefire-reports/
 
 Tip Profesional: Antes de realizar un git push o un despliegue, siempre es recomendable ejecutar mvn clean test para asegurar que las nuevas modificaciones no hayan roto funcionalidades existentes (regresión).
+
+
+#Despliegue en la Nube (AWS)
+La solución se encuentra desplegada y operativa en una instancia EC2 de AWS, orquestada mediante Docker Compose para garantizar la paridad entre los entornos de desarrollo y producción.
+
+Host: 3.14.87.73 (Región: Ohio - us-east-2).
+
+Arquitectura de Red: El microservicio y la base de datos coexisten en una red virtual de Docker, exponiendo únicamente los puertos necesarios hacia el exterior para mantener la seguridad del entorno.
+
+Infraestructura como Código: Se incluyen archivos de configuración de Terraform en el repositorio (src/terraform) para la provisión automatizada de los recursos de red y cómputo.
+
+# Acceso a la API en Nube
+Puedes realizar pruebas directamente contra la instancia de AWS utilizando los siguientes puntos de enlace:
+
+Swagger UI (Nube): [http://3.14.87.73:8081/webjars/swagger-ui/index.html](http://3.14.87.73:8081/webjars/swagger-ui/index.html)
+
+Base URL API: [http://3.14.87.73:8081/api/v1](http://3.14.87.73:8081/api/v1)
+
+## Actualización del "Leeme" actual
+Para que el resto de tu documento sea coherente con la nueva sección, te sugiero ajustar la parte de Instrucciones de Ejecución para diferenciar entre el modo local y el modo contenedor completo:
+
+## 1. Ejecución con Docker (Recomendado)
+Si deseas levantar la infraestructura completa (API + MongoDB) sin necesidad de tener Java instalado localmente:
+
+### Bash
+docker-compose up -d --build
+Esto compilará el código dentro de un contenedor de construcción y desplegará el microservicio en el puerto 8081.
