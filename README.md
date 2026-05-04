@@ -161,3 +161,38 @@ Si deseas levantar la infraestructura completa (API + MongoDB) sin necesidad de 
 ### Bash
 docker-compose up -d --build
 Esto compilará el código dentro de un contenedor de construcción y desplegará el microservicio en el puerto 8081.
+
+
+
+# Despliegue en la Nube (AWS)
+La solución se encuentra desplegada y operativa en una instancia EC2 de AWS, orquestada mediante Docker Compose para garantizar la paridad entre los entornos de desarrollo y producción.
+
+Detalles de Infraestructura
+Host: 3.14.87.73 (Región: Ohio - us-east-2).
+
+Entorno: Contenedores Docker sobre Linux (Amazon Linux 2023).
+
+Red: El microservicio y la base de datos coexisten en una red interna de Docker, exponiendo únicamente el puerto 8081 para el tráfico de la API y el puerto 27018 para conexiones externas de base de datos (según configuración de seguridad).
+
+IaC (Infrastructure as Code): Se incluyen manifiestos de Terraform en src/terraform/ para la provisión automatizada de la VPC, Security Groups e instancias.
+
+Acceso y Monitoreo
+Para validar el funcionamiento en el entorno real, puedes utilizar los siguientes puntos de enlace:
+
+Swagger UI (Nube): [http://3.14.87.73:8081/webjars/swagger-ui/index.html](http://3.14.87.73:8081/webjars/swagger-ui/index.html).
+
+Base URL API: [http://3.14.87.73:8081/api/v1](http://3.14.87.73:8081/api/v1).
+
+## Gestión del Ciclo de Vida (CI/CD Manual)
+Dado que el microservicio se encuentra dockerizado, la actualización en la nube sigue un flujo de entrega continua simplificado:
+
+Sincronización: Se realiza un pull de los cambios desde la rama main de GitHub directamente en la instancia de Ohio.
+
+Reconstrucción: Uso de docker-compose up -d --build para compilar el código fuente dentro de la imagen y reiniciar los servicios con el nuevo artefacto.
+
+Monitoreo: Seguimiento de flujos reactivos mediante docker-compose logs -f para asegurar que el contexto de Spring Boot y el driver de MongoDB Reactivo levanten correctamente.
+
+## Notas Adicionales de Implementación Senior
+Estrategia de Ramas: El desarrollo se centralizó en la rama franquicias y se integró mediante push --force a la rama main para mantener un historial de despliegue lineal y limpio.
+
+Seguridad: Se implementó un archivo .gitignore estricto para prevenir la fuga de credenciales sensibles (como la llave .pem de AWS) y artefactos de compilación local (target/).
